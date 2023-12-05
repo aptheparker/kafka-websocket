@@ -1,0 +1,30 @@
+<html lang="en">
+  <header>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+   <script>
+     let socket = io('http://localhost:3000/socket', {
+       transports: ['websocket']
+     });
+     socket.on('connect', function () {
+       console.log('连接成功');
+       socket.emit('hello', {
+         name: 'world'
+       });
+ 
+       socket.emit('response', {
+         name: 'world'
+       });
+     });
+ 
+     socket.on('hello', (data) => {
+         document.body.innerHTML += JSON.stringify(data) + '<br>';
+     });
+ 
+     socket.on('response', (data) => {
+         document.body.innerHTML+= JSON.stringify(data) + '<br>';
+     });
+   </script>
+  </header>
+ 
+   </html>
+ 

@@ -1,17 +1,18 @@
-import { Controller, Get, Inject } from '@nestjs/common';
-import { AppService } from './app.service';
-import { ClientKafka } from '@nestjs/microservices';
+import {Controller, Get} from '@nestjs/common';
+import {AppService} from './app.service';
+import {KafkaProducer} from './microservices/client/kafka-producer';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService, 
-    @Inject('app-provider') private readonly kafkaProvider: ClientKafka,
-  ) {}
+    private readonly kafkaProducer = new KafkaProducer();
+    constructor(
+        private readonly appService: AppService,
+    ) {
+    }
 
-  @Get()
-  sendKafka(): string {
-    this.kafkaProvider.emit('kafka-topic-1', 'kafka message sent');
-    return this.appService.sendKafka();
-  }
+    @Get()
+    getHello(): string {
+        this.kafkaProducer.send('test', 'hihihi');
+        return this.appService.getHello();
+    }
 }
